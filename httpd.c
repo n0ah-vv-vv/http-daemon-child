@@ -144,7 +144,7 @@ int create_http_response(
 
 int main() {
 
-	int sock, success, s2, len;
+	int sock, success, sock2, len;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
@@ -189,8 +189,8 @@ int main() {
 
 		t = sizeof(remote);
 		// open a new socket for the new connection
-		s2 = accept(sock, (struct sockaddr *) &remote, &t);
-		if (s2 == -1){
+		sock2 = accept(sock, (struct sockaddr *) &remote, &t);
+		if (sock2 == -1){
 			fprintf(stderr, "[*] ERROR accepting\n");
 			return 1;
 		}
@@ -207,7 +207,7 @@ int main() {
 			char browser_req[1048];
 
 			// receive input from client
-			req = read(s2, browser_req, 512);
+			req = read(sock2, browser_req, 512);
 			if (req == -1) {
 				fprintf(stderr, "[*] Error receiving\n");
 			}
@@ -233,7 +233,7 @@ int main() {
 			num_files = scandir(dir, &namelist, NULL, alphasort);
 			if (num_files < 0) {
 				fprintf(stderr, "[*] Scandir Error: directory does not exist\n");
-				close(s2);
+				close(sock2);
 				close(sock);
 				exit(1);
 			}
@@ -242,11 +242,11 @@ int main() {
 			c = create_http_response(response, file_name, namelist, num_files, response_type);
 			if (c) {
 				fprintf(stderr, "[*] Error opening and reading file\n");
-				if (write(s2, response, sizeof(response)) < 0) {
+				if (write(sock2, response, sizeof(response)) < 0) {
 					fprintf(stderr, "[*] ERROR sending\n");
 				}
 				printf("[*] 404 sent, closing sockets\n");
-				close(s2);
+				close(sock2);
 				close(sock);
 				exit(1);
 			}
@@ -254,13 +254,13 @@ int main() {
 			printf("[*] Response length: %ld\n", strlen(response));
 
 
-			if (write(s2, response, sizeof(response)) < 0) {
+			if (write(sock2, response, sizeof(response)) < 0) {
 				fprintf(stderr, "[*] ERROR sending\n");
 			}
 			printf("[*] Content sent\n");
 
 			printf("[*] Closing socket\n\n");
-			close (s2);
+			close (sock2);
 			close(sock);
 			exit(0);
 			
