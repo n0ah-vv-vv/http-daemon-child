@@ -49,8 +49,12 @@ int find_file(char * file_name, struct dirent **namelist, int num_files) {
 }
 
 // writes the correct HTTP header and content into response
-int create_http_response(char * response, char * file_name, struct dirent **namelist,
-		int num_files, char * response_type) {
+int create_http_response(
+	char * response,
+	char * file_name,
+	struct dirent **namelist,
+	int num_files, char * response_type
+) {
 	int fd, file_pos, offset;
 	// max size of content is 1 MB
 	unsigned char content[1000000]; 
