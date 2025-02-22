@@ -144,12 +144,12 @@ int create_http_response(
 
 int main() {
 
-	int s, s1, b, s2, len;
+	int sock, s1, b, s2, len;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
-	s = socket(AF_INET, SOCK_STREAM, 0);
-	if (s == -1) {
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock == -1) {
 		fprintf(stderr, "[*] ERROR creating socket\n");
 		exit(1);
 	}
@@ -169,7 +169,7 @@ int main() {
 
 	len = sizeof(local);
 	// bind to socket to a file descriptor
-	b = bind(s, (struct sockaddr *) &local, len);
+	b = bind(sock, (struct sockaddr *) &local, len);
 	if (b == -1){
 		fprintf (stderr, "[*] ERROR binding\n");
 		exit(1);
@@ -177,7 +177,7 @@ int main() {
 	printf("[*] Binding successful.\n");
 
 	// increase 1 to n to accept more conections
-	if (listen(s, 7) == -1) {
+	if (listen(sock, 7) == -1) {
 		fprintf(stderr, "[*] ERROR listening\n");
 		exit(1);
 	}
@@ -189,7 +189,7 @@ int main() {
 
 		t = sizeof(remote);
 		// open a new socket for the new connection
-		s2 = accept(s, (struct sockaddr *) &remote, &t);
+		s2 = accept(sock, (struct sockaddr *) &remote, &t);
 		if (s2 == -1){
 			fprintf(stderr, "[*] ERROR accepting\n");
 			return 1;
@@ -202,7 +202,7 @@ int main() {
 		// child process will take care of dealing with HTTP request
 		if (pid == 0) {
 
-			close(s);
+			close(sock);
 			int req;
 			char browser_req[1048];
 
@@ -234,7 +234,7 @@ int main() {
 			if (num_files < 0) {
 				fprintf(stderr, "[*] Scandir Error: directory does not exist\n");
 				close(s2);
-				close(s);
+				close(sock);
 				exit(1);
 			}
 
@@ -247,7 +247,7 @@ int main() {
 				}
 				printf("[*] 404 sent, closing sockets\n");
 				close(s2);
-				close(s);
+				close(sock);
 				exit(1);
 			}
 			printf("[*] Constructed response\n");
@@ -261,7 +261,7 @@ int main() {
 
 			printf("[*] Closing socket\n\n");
 			close (s2);
-			close(s);
+			close(sock);
 			exit(0);
 			
 		}
@@ -269,7 +269,7 @@ int main() {
 			continue;
 		}
 	}
-	close(s);
+	close(sock);
 
 	return 0;
 }
