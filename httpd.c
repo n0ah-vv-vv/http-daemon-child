@@ -144,7 +144,7 @@ int create_http_response(
 
 int main() {
 
-	int sock, success, b, s2, len;
+	int sock, success, s2, len;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
@@ -169,8 +169,8 @@ int main() {
 
 	len = sizeof(local);
 	// bind to socket to a file descriptor
-	b = bind(sock, (struct sockaddr *) &local, len);
-	if (b == -1){
+	success = bind(sock, (struct sockaddr *) &local, len);
+	if (success == -1){
 		fprintf (stderr, "[*] ERROR binding\n");
 		exit(1);
 	}
