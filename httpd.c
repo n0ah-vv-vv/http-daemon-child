@@ -144,12 +144,12 @@ int create_http_response(
 
 int main() {
 
-	int sock, success, sock2, len;
+	int sock1, success, sock2, len;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == -1) {
+	sock1 = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock1 == -1) {
 		fprintf(stderr, "[*] ERROR creating socket\n");
 		exit(1);
 	}
@@ -169,7 +169,7 @@ int main() {
 
 	len = sizeof(local);
 	// bind to socket to a file descriptor
-	success = bind(sock, (struct sockaddr *) &local, len);
+	success = bind(sock1, (struct sockaddr *) &local, len);
 	if (success == -1){
 		fprintf (stderr, "[*] ERROR binding\n");
 		exit(1);
@@ -177,7 +177,7 @@ int main() {
 	printf("[*] Binding successful.\n");
 
 	// increase 1 to n to accept more conections
-	if (listen(sock, 7) == -1) {
+	if (listen(sock1, 7) == -1) {
 		fprintf(stderr, "[*] ERROR listening\n");
 		exit(1);
 	}
@@ -189,7 +189,7 @@ int main() {
 
 		t = sizeof(remote);
 		// open a new socket for the new connection
-		sock2 = accept(sock, (struct sockaddr *) &remote, &t);
+		sock2 = accept(sock1, (struct sockaddr *) &remote, &t);
 		if (sock2 == -1){
 			fprintf(stderr, "[*] ERROR accepting\n");
 			return 1;
@@ -202,7 +202,7 @@ int main() {
 		// child process will take care of dealing with HTTP request
 		if (pid == 0) {
 
-			close(sock);
+			close(sock1);
 			int req;
 			char browser_req[1048];
 
@@ -234,7 +234,7 @@ int main() {
 			if (num_files < 0) {
 				fprintf(stderr, "[*] Scandir Error: directory does not exist\n");
 				close(sock2);
-				close(sock);
+				close(sock1);
 				exit(1);
 			}
 
@@ -247,7 +247,7 @@ int main() {
 				}
 				printf("[*] 404 sent, closing sockets\n");
 				close(sock2);
-				close(sock);
+				close(sock1);
 				exit(1);
 			}
 			printf("[*] Constructed response\n");
@@ -260,8 +260,8 @@ int main() {
 			printf("[*] Content sent\n");
 
 			printf("[*] Closing socket\n\n");
-			close (sock2);
-			close(sock);
+			close(sock2);
+			close(sock1);
 			exit(0);
 			
 		}
@@ -269,7 +269,7 @@ int main() {
 			continue;
 		}
 	}
-	close(sock);
+	close(sock1);
 
 	return 0;
 }
