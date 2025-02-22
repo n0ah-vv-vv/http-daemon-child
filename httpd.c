@@ -144,7 +144,7 @@ int create_http_response(
 
 int main() {
 
-	int sock1, success, sock2, len;
+	int sock1, sock2, len, success;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
