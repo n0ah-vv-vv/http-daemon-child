@@ -29,3 +29,25 @@ make all
 It would be nice if I could make the code testable before running it.
 
 Deepseek just wrote a bunch of tests that seem to work out of the box.
+
+## Learning
+
+#### sockets
+
+###### Amateur radio
+
+Apparently you can make a socket radio?
+
+```
+AF_AX25      Amateur radio AX.25 protocol               ax25(4)
+```
+
+###### AF_INET, AF_INET6
+
+IPv4 and IPv6 Internet protocols
+
+###### AF_NETLINK
+
+```
+AF_NETLINK   Kernel user interface device               netlink(7)
+```
