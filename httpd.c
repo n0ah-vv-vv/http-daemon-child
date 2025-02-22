@@ -28,6 +28,7 @@
 
 // for scandir
 #define _POSIX_C_SOURCE 200809L
+#define PORT 8080
 
 // returns position of file in list of files, if present
 // else return -1
@@ -143,7 +144,6 @@ int create_http_response(
 int main() {
 
 	int s, s1, b, s2, len;
-	long int port;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
@@ -164,8 +164,7 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 	// use http port
-	port = 8080;
-	local.sin_port = htons(port);
+	local.sin_port = htons(PORT);
 
 	len = sizeof(local);
 	// bind to socket to a file descriptor
