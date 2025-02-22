@@ -28,6 +28,7 @@
 
 // for scandir
 #define _POSIX_C_SOURCE 200809L
+#define SERVER_IP "127.0.0.1"
 #define PORT 8080
 
 // returns position of file in list of files, if present
@@ -155,7 +156,7 @@ int main() {
 	printf("[*] Socket creation successful.\n");
 
 	local.sin_family = AF_INET;
-	s1 = inet_pton(AF_INET, "127.0.0.1", &local.sin_addr.s_addr);
+	s1 = inet_pton(AF_INET, SERVER_IP, &local.sin_addr.s_addr);
 	if (s1 <= 0) {
 		if (s1 == 0)
 			fprintf(stderr, "[*] Not in presenatio format");
