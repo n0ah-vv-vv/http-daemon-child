@@ -142,6 +142,19 @@ int create_http_response(
 
 }
 
+int copy_addr_to_struct(struct sockaddr_in *local) {
+	int success = inet_pton(AF_INET, SERVER_IP, &local->sin_addr.s_addr);
+	if (success <= 0) {
+		if (success == 0)
+			fprintf(stderr, "[*] Not in presentation format");
+		else
+			perror("inet_pton");
+		return 0;
+	}
+	return 1;
+}
+
+
 int main() {
 
 	int sock1, sock2, len, success;
@@ -156,12 +169,7 @@ int main() {
 	printf("[*] Socket creation successful.\n");
 
 	local.sin_family = AF_INET;
-	success = inet_pton(AF_INET, SERVER_IP, &local.sin_addr.s_addr);
-	if (success <= 0) {
-		if (success == 0)
-			fprintf(stderr, "[*] Not in presenatio format");
-		else
-			perror("inet_pton");
+	if (!copy_addr_to_struct(&local)) {
 		exit(EXIT_FAILURE);
 	}
 	// use http port
