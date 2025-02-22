@@ -64,8 +64,7 @@ int create_http_response(
 
 	// if file cannot be found return 404 header
 	if (file_pos < 1) {
-		
-		strncpy(response, "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nConnection: close\nContent-Length: 5000\r\n\r\n<!doctype html><html><head><title>404 Not Found</title></head><body>404 - Not Found lol</body></html>\0", 5115);
+		strncpy(response, "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nConnection: close\nContent-Length: 5000\r\n\r\n<!doctype html><html><head><title>404 Not Found</title></head><body>404 - Not Found</body></html>\0", 5115);
 		return 1;
 	}
 
