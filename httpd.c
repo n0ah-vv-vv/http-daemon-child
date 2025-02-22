@@ -144,7 +144,7 @@ int create_http_response(
 
 int main() {
 
-	int sock, s1, b, s2, len;
+	int sock, success, b, s2, len;
 	unsigned int t;
 	struct sockaddr_in local, remote;
 
@@ -156,9 +156,9 @@ int main() {
 	printf("[*] Socket creation successful.\n");
 
 	local.sin_family = AF_INET;
-	s1 = inet_pton(AF_INET, SERVER_IP, &local.sin_addr.s_addr);
-	if (s1 <= 0) {
-		if (s1 == 0)
+	success = inet_pton(AF_INET, SERVER_IP, &local.sin_addr.s_addr);
+	if (success <= 0) {
+		if (success == 0)
 			fprintf(stderr, "[*] Not in presenatio format");
 		else
 			perror("inet_pton");
